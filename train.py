@@ -41,98 +41,98 @@ df_full_train.drop_duplicates(inplace = True)
 df_full_train.reset_index(drop = True, inplace = True)
 
 # ## Check null values
-# df_full_train.isnull().sum()
+df_full_train.isnull().sum()
 
-# ## Drop unused columns
-# df_full_train.drop(columns = ['LeadID'], inplace = True)
+## Drop unused columns
+df_full_train.drop(columns = ['LeadID'], inplace = True)
 
-# ## Remove outliers
-# numerical_columns = ['Age',
-#  'TimeSpentMinutes',
-#  'PagesViewed',
-#  'EmailSent',
-#  'FormSubmissions',
-#  'Downloads',
-#  'ResponseTimeHours',
-#  'FollowUpEmails',
-#  'SocialMediaEngagement']
+## Remove outliers
+numerical_columns = ['Age',
+ 'TimeSpentMinutes',
+ 'PagesViewed',
+ 'EmailSent',
+ 'FormSubmissions',
+ 'Downloads',
+ 'ResponseTimeHours',
+ 'FollowUpEmails',
+ 'SocialMediaEngagement']
 
-# index_outlier = []
-# for num in numerical_columns:
-#     q99 = np.quantile(df_full_train[num], .99)
-#     outlier = df_full_train[df_full_train[num] > q99].index.tolist()
-#     index_outlier.extend(outlier)
-# index_outlier = list(set(index_outlier))
+index_outlier = []
+for num in numerical_columns:
+    q99 = np.quantile(df_full_train[num], .99)
+    outlier = df_full_train[df_full_train[num] > q99].index.tolist()
+    index_outlier.extend(outlier)
+index_outlier = list(set(index_outlier))
 
-# df_full_train_cleaned = df_full_train.drop(index = index_outlier,)
-# df_full_train_cleaned.reset_index(drop = True, inplace = True)
-# print("Data preparation step done !")
+df_full_train_cleaned = df_full_train.drop(index = index_outlier,)
+df_full_train_cleaned.reset_index(drop = True, inplace = True)
+print("Data preparation step done !")
 
-# # Model training
+# Model training
 
-# ## Get selected features for model
-# top_numerical_columns = ['PagesViewed', 'Age', 'EmailSent', 'TimeSpentMinutes', 'FollowUpEmails', 'SocialMediaEngagement', 'FormSubmissions', 'Downloads', 'ResponseTimeHours',] 
-# top_categorical_columns = ['Location', 'LeadStatus',]
+## Get selected features for model
+top_numerical_columns = ['PagesViewed', 'Age', 'EmailSent', 'TimeSpentMinutes', 'FollowUpEmails', 'SocialMediaEngagement', 'FormSubmissions', 'Downloads', 'ResponseTimeHours',] 
+top_categorical_columns = ['Location', 'LeadStatus',]
 
-# df_full_train_cleaned_selected = pd.concat([df_full_train_cleaned[top_numerical_columns], df_full_train_cleaned[top_categorical_columns], df_full_train_cleaned[['Conversion']]], axis = 1)
-# df_full_train_cleaned_selected.head()
+df_full_train_cleaned_selected = pd.concat([df_full_train_cleaned[top_numerical_columns], df_full_train_cleaned[top_categorical_columns], df_full_train_cleaned[['Conversion']]], axis = 1)
+df_full_train_cleaned_selected.head()
 
-# ## Get prepared dataset
-# X_train_new = df_full_train_cleaned_selected.drop(columns = ['Conversion'])
-# y_train_new = df_full_train_cleaned_selected['Conversion']
+## Get prepared dataset
+X_train_new = df_full_train_cleaned_selected.drop(columns = ['Conversion'])
+y_train_new = df_full_train_cleaned_selected['Conversion']
 
-# ## Define preprocessing for numerical data
-# numerical_transformer = Pipeline(steps=[
-#     ('scaler', StandardScaler())
-# ])
+## Define preprocessing for numerical data
+numerical_transformer = Pipeline(steps=[
+    ('scaler', StandardScaler())
+])
 
-# ## Define preprocessing for categorical data
-# categorical_transformer = Pipeline(steps=[
-#     ('onehot', OneHotEncoder(drop = 'first', handle_unknown='ignore'))
-# ])
+## Define preprocessing for categorical data
+categorical_transformer = Pipeline(steps=[
+    ('onehot', OneHotEncoder(drop = 'first', handle_unknown='ignore'))
+])
 
-# ## Combine preprocessors in a ColumnTransformer
-# preprocessor = ColumnTransformer(
-#     transformers=[
-#         ('num', numerical_transformer, top_numerical_columns),
-#         ('cat', categorical_transformer, top_categorical_columns)
-#     ])
+## Combine preprocessors in a ColumnTransformer
+preprocessor = ColumnTransformer(
+    transformers=[
+        ('num', numerical_transformer, top_numerical_columns),
+        ('cat', categorical_transformer, top_categorical_columns)
+    ])
 
-# ## Define the full pipeline
-# pipeline = Pipeline(steps=[
-#     ('preprocessor', preprocessor),
-#     ('classifier', RandomForestClassifier(random_state=42))
-# ])
+## Define the full pipeline
+pipeline = Pipeline(steps=[
+    ('preprocessor', preprocessor),
+    ('classifier', RandomForestClassifier(random_state=42))
+])
 
-# ## Fit pipeline
-# pipeline.fit(X_train_new, y_train_new)
+## Fit pipeline
+pipeline.fit(X_train_new, y_train_new)
 
-# ## Perform cross-validation
-# cv_scores = cross_val_score(pipeline, X_train_new, y_train_new, cv=5, scoring='roc_auc')
-# print(f"Cross-Validation Accuracy: {cv_scores.mean():.4f} ± {cv_scores.std():.4f}")
+## Perform cross-validation
+cv_scores = cross_val_score(pipeline, X_train_new, y_train_new, cv=5, scoring='roc_auc')
+print(f"Cross-Validation Accuracy: {cv_scores.mean():.4f} ± {cv_scores.std():.4f}")
 
-# ## Define parameter grid
-# param_grid = {
-#     'classifier__n_estimators': [50, 100, 200],
-#     'classifier__max_depth': [None, 10, 20],
-#     'classifier__min_samples_split': [2, 5]
-# }
+## Define parameter grid
+param_grid = {
+    'classifier__n_estimators': [50, 100, 200],
+    'classifier__max_depth': [None, 10, 20],
+    'classifier__min_samples_split': [2, 5]
+}
 
-# ## Run grid search to find best parameters
-# grid_search = GridSearchCV(pipeline, param_grid, cv=5, scoring='roc_auc', n_jobs=-1)
-# grid_search.fit(X_train_new, y_train_new)
+## Run grid search to find best parameters
+grid_search = GridSearchCV(pipeline, param_grid, cv=5, scoring='roc_auc', n_jobs=-1)
+grid_search.fit(X_train_new, y_train_new)
 
-# ## Best parameters and score
-# print(f"Best Parameters: {grid_search.best_params_}")
-# print(f"Best CV Score: {grid_search.best_score_:.4f}")
+## Best parameters and score
+print(f"Best Parameters: {grid_search.best_params_}")
+print(f"Best CV Score: {grid_search.best_score_:.4f}")
 
-# ## Save pipeline to a file
-# with open('model/best_pipeline.pkl', 'wb') as f:
-#     joblib.dump(grid_search.best_estimator_, f)
+## Save pipeline to a file
+with open('model/best_pipeline.pkl', 'wb') as f:
+    joblib.dump(grid_search.best_estimator_, f)
 
-# print("Model training step done !")   
+print("Model training step done !")   
 
-# # Model evaluation    
+# Model evaluation    
 
 ## Load pipeline
 with open('model/best_pipeline.pkl', 'rb') as f:
