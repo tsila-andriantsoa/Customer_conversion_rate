@@ -27,7 +27,7 @@ To set up this project locally, follow these steps:
    ```bash
    git clone https://github.com/username/repo-name.git
 
-2. Activate virtual environment (make sur pipenv is already installed):
+2. Activate virtual environment (make sure pipenv is already installed):
    ```bash
    pipenv shell
 
@@ -39,7 +39,20 @@ To set up this project locally, follow these steps:
    ```bash
    pipenv shell
 
-5. Run the project locally
+5. Run the project locally with pipenv
     ```bash
    # train the model
-   python train.py
+   pypenv python train.py
+
+   # do predict
+   pipenv run python predict.py
+
+To set up this projet using Docker Container
+
+1. Build the docker image (make sure docker is already installed):
+   ```bash
+   docker build -t predict-app .
+
+2. Running the docker container:
+   ```bash
+   docker run -d -p 5000:5000 predict-app
