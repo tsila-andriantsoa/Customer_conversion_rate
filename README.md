@@ -53,3 +53,4 @@ To set up this projet using Docker Container
 2. Running the docker container:
    ```bash
    docker run -d -p 5000:5000 predict-app
+   
