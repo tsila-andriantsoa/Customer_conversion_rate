@@ -1,4 +1,4 @@
-# Project Title: Customer conversion rate prediction
+# Customer conversion rate prediction
 
 Welcome to the **Customer conversion rate prediction** project! This repository provides tools and resources for predicting customer conversion rate based on synthetic dataset in order to help marketing teams in business decision.
 
