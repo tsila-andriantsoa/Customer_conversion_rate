@@ -10,6 +10,9 @@ scikit-learn = "==1.3.0"
 matplotlib = "*"
 numpy = "==1.24.3"
 joblib = "*"
+flask = "==2.2.2"
+waitress = "*"
+werkzeug = "==2.2.2"
 
 [dev-packages]
 
