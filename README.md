@@ -41,7 +41,7 @@ To set up this project locally, follow these steps:
    # train the model
    pypenv python train.py
 
-   # do predict
+   # do prediction
    pipenv run python predict.py
 
 To set up this projet using Docker Container
