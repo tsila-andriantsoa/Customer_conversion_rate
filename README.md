@@ -5,11 +5,8 @@ Welcome to the **Customer conversion rate prediction** project! This repository 
 ## Table of Contents
 
 1. [Overview](#overview)
-2. [Features](#features)
+2. [Dataset](#dataset)
 3. [Setup Instructions](#setup-instructions)
-4. [Usage Guide](#usage-guide)
-5. [Contributing](#contributing)
-6. [License](#license)
 
 ## Overview
 
